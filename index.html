@@ -3,176 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STRIKE STREAM | Live Football & Chat Hub</title>
-    <!-- Video.js Engine CSS -->
-    <link href="https://zencdn.net" rel="stylesheet" />
-    <style>
-        :root {
-            --bg-main: #060b13;
-            --bg-card: #0f172a;
-            --accent: #00ff88;
-            --accent-hover: #00cc6c;
-            --text: #ffffff;
-            --text-muted: #94a3b8;
-            --border: #1e293b;
-        }
-        body { font-family: 'Segoe UI', Roboto, sans-serif; background-color: var(--bg-main); color: var(--text); margin: 0; padding: 15px; }
-        header { text-align: center; padding: 15px; background: var(--bg-card); border-bottom: 3px solid var(--accent); border-radius: 12px; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 24px; color: var(--text); letter-spacing: 1px; }
-        h1 span { color: var(--accent); }
-        
-        /* Grid System for Channel List, Player + Chat, and Live Scores */
-        .layout-grid { display: grid; grid-template-columns: 280px 1fr 340px; gap: 20px; max-width: 1750px; margin: 0 auto; }
-        @media (max-width: 1200px) { .layout-grid { grid-template-columns: 1fr 1fr; } .chat-panel { grid-column: span 2; } }
-        @media (max-width: 768px) { .layout-grid { grid-template-columns: 1fr; } .chat-panel { grid-column: span 1; } }
-
-        /* Generic Panels */
-        .panel { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 15px; display: flex; flex-direction: column; }
-        .panel-title { margin-top: 0; font-size: 14px; color: var(--accent); text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid var(--border); padding-bottom: 10px; margin-bottom: 12px; }
-
-        /* Sidebar Channel Buttons */
-        .match-btn { background: #1e293b; border: 1px solid #334155; padding: 12px; margin-bottom: 10px; border-radius: 8px; cursor: pointer; text-align: left; width: 100%; color: #fff; display: block; transition: all 0.2s ease; }
-        .match-btn:hover { background: #334155; border-color: var(--accent); }
-        .match-btn strong { color: var(--accent); display: block; font-size: 10px; text-transform: uppercase; margin-bottom: 3px; }
-        .active-match { background: var(--accent) !important; color: #000 !important; border-color: var(--accent) !important; font-weight: bold; }
-        .active-match strong { color: #000 !important; }
-
-        /* Video Area */
-        .video-box { position: relative; width: 100%; background: #000; border-radius: 10px; overflow: hidden; }
-        .video-js { width: 100% !important; height: auto !important; aspect-ratio: 16/9; }
-        #match-title { margin: 15px 0 5px 0; color: #fff; font-size: 20px; }
-        .status-badge { width: fit-content; background: rgba(0, 255, 136, 0.15); color: var(--accent); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; margin-top: 5px; }
-
-        /* Live Chat Engine Layout */
-        .chat-panel { height: 500px; }
-        .chat-messages { flex: 1; overflow-y: auto; padding-right: 5px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 8px; }
-        .chat-msg { font-size: 13px; line-height: 1.4; background: rgba(255,255,255,0.02); padding: 6px 10px; border-radius: 6px; }
-        .chat-user { font-weight: bold; color: var(--accent); margin-right: 5px; }
-        .chat-input-area { display: flex; gap: 8px; border-top: 1px solid var(--border); padding-top: 10px; }
-        .chat-input { flex: 1; background: #1e293b; border: 1px solid #334155; padding: 10px; border-radius: 6px; color: #fff; font-size: 13px; }
-        .chat-input:focus { outline: 1px solid var(--accent); }
-        .chat-send-btn { background: var(--accent); border: none; padding: 0 15px; border-radius: 6px; color: #000; font-weight: bold; cursor: pointer; }
-
-        /* Scoreboard Widget */
-        .scores-list { display: flex; flex-direction: column; gap: 10px; overflow-y: auto; max-height: 450px; }
-        .score-item { background: #1e293b; border: 1px solid #334155; padding: 12px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; }
-        .team-row { display: flex; flex-direction: column; gap: 4px; font-size: 13px; }
-        .score-row { display: flex; flex-direction: column; gap: 4px; font-weight: bold; font-size: 13px; color: var(--accent); text-align: right; }
-        .match-time { font-size: 11px; color: var(--text-muted); background: #0f172a; padding: 3px 6px; border-radius: 4px; text-align: center; min-width: 50px; }
-    </style>
+    <title>LiveSports - Free Streaming</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Include HLS.js library for live stream playback support -->
+    <script src="https://jsdelivr.net"></script>
 </head>
 <body>
 
-<header>
-    <h1>⚡ STRIKE<span>STREAM</span> Live Arena</h1>
-    <p style="margin:5px 0 0 0; color: var(--text-muted); font-size:12px;">Premium Live Video Matrix with Decentralized Fan Chat</p>
-</header>
+    <!-- Header Navigation -->
+    <header class="navbar">
+        <div class="logo">🏆 Live<span>Sports</span></div>
+        <nav>
+            <a href="#" class="active">Live Matches</a>
+            <a href="#">Schedule</a>
+            <a href="#">Leagues</a>
+        </nav>
+    </header>
 
-<div class="layout-grid">
-    <!-- COLUMN 1: Active Channels Sidebar -->
-    <div class="panel">
-        <h2 class="panel-title">⚡ Servers</h2>
-        <div id="dynamic-links-container"></div>
-    </div>
-
-    <!-- COLUMN 2: Main Player & Live Fan Chat -->
-    <div style="display: flex; flex-direction: column; gap: 20px;">
-        <div class="panel">
-            <div class="video-box">
-                <video id="api-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" poster="https://unsplash.com"></video>
+    <!-- Main Content Area -->
+    <main class="container">
+        <!-- Left Side: Video Player & Match Info -->
+        <section class="stream-section">
+            <div class="video-container">
+                <video id="video-player" controls autoplay muted></video>
             </div>
-            <h3 id="match-title">Loading Active Streaming Feeds...</h3>
-            <div class="status-badge">● LIVE ULTRA HD</div>
-        </div>
+            <div class="match-details">
+                <h1 id="match-title">Loading Match...</h1>
+                <p id="match-status">🔴 LIVE | 1080p 60fps</p>
+            </div>
+        
 
-        <!-- Chat Integration Frame -->
-        <div class="panel chat-panel">
-            <h2 class="panel-title">💬 Live Global Fan Room</h2>
-            <div class="chat-messages" id="chat-box">
-                <div class="chat-msg"><span class="chat-user">System:</span>Welcome to the Stadium room! Please keep discussions sports-related.</div>
+        <!-- Right Side: Sidebar Chat Simulation -->
+        <aside class="chat-section">
+            <h3>Live Fan Chat</h3>
+            <div class="chat-box" id="chat-box">
+                <!-- Chat messages injected by JS -->
             </div>
             <div class="chat-input-area">
-                <input type="text" id="chat-input-field" class="chat-input" placeholder="Type a message to the stadium..." maxlength="120">
-                <button class="chat-send-btn" id="chat-send-btn">Send</button>
+                <input type="text" id="chat-input" placeholder="Send a message...">
+                <button id="send-btn">Send</button>
             </div>
+        </aside>
+    </main>
+
+    <!-- Bottom Section: Grid of Available Channels -->
+    <section class="channels-section">
+        <h2>Available Live Channels</h2>
+        <div class="channels-grid" id="channels-grid">
+            <!-- Channel cards injected by JS -->
         </div>
-    </div>
+    
 
-    <!-- COLUMN 3: Real Football Matches Timetable Schedule API Widget -->
-    <div class="panel">
-        <h2 class="panel-title">📅 Live Football Timetable</h2>
-        <div class="scores-list" id="scores-container">
-            <div style="color: var(--text-muted); font-size: 13px; text-align: center; padding: 20px;">Fetching Live Global Leagues Schedule...</div>
-        </div>
-    </div>
-</div>
-
-<!-- Video.js Core Module -->
-<script src="https://zencdn.net"></script>
-
-<script>
-    let player;
-
-    const activeFeeds = [
-        { name: "Main Match Feed (Camera Angle A)", hlsUrl: "https://mux.dev" },
-        { name: "Tactical Alternate Feed (Angle B)", hlsUrl: "https://longtailvideo.com" },
-        { name: "Global Sports Feed (Backup Layer)", hlsUrl: "https://unified-streaming.com" }
-    ];
-
-    const botNames = ["Giggsy99", "CR7_Fanatic", "MessiMagic", "KloppKlopp", "Gunner4Life", "BlueArmy", "TacticalSam", "StrikerX"];
-    const botMessages = [
-        "What a phenomenal challenge by the defender! 🔥",
-        "Ref needs his eyes checked! Clear penalty!",
-        "GOALLLLLLL omg what a strike!!! ⚽⚽",
-        "This manager's substitution layout makes no sense.",
-        "Are we playing a 4-3-3 or 4-4-2 tonight? Looks disjointed.",
-        "Unbelievable save from the keeper!",
-        "Stream quality is crisp. Zero lag here.",
-        "Pass the ball sooner!! He was wide open!"
-    ];
-
-    document.addEventListener("DOMContentLoaded", () => {
-        player = videojs('api-player', { fluid: true, userActions: { hotkeys: true } });
-        renderChannelSidebar();
-        if(activeFeeds.length > 0) switchLiveStream(activeFeeds[0].hlsUrl, activeFeeds[0].name);
-
-        initLiveChatEngine();
-        fetchLiveFootballSchedule();
-    });
-
-    function renderChannelSidebar() {
-        const container = document.getElementById('dynamic-links-container');
-        container.innerHTML = ""; 
-        activeFeeds.forEach((server, index) => {
-            const btn = document.createElement('button');
-            btn.className = "match-btn";
-            if(index === 0) btn.classList.add('active-match');
-            btn.onclick = () => {
-                document.querySelectorAll('.match-btn').forEach(b => b.classList.remove('active-match'));
-                btn.classList.add('active-match');
-                switchLiveStream(server.hlsUrl, server.name);
-            };
-            btn.innerHTML = `<strong>📡 SERVER HD 0${index + 1}</strong>${server.name}`;
-            container.appendChild(btn);
-        });
-    }
-
-    function switchLiveStream(url, name) {
-        document.getElementById('match-title').innerText = name;
-        if (player) {
-            player.src({ src: url, type: 'application/x-mpegURL' });
-            player.load();
-            player.play().catch(() => console.log("User action expected to initiate stream audio layout."));
-        }
-    }
-
-    /* Live Simulated Chat Feature */
-    function initLiveChatEngine() {
-        const chatBox = document.getElementById('chat-box');
-        const inputField = document.getElementById('chat-input-field');
-        const sendBtn = document.getElementById('chat-send-btn');
-
-        function appendMessage(user, text, isCustom = false) {
-            const msg = document.createElement('div');
-            msg.className = "chat-msg";
-Use code with caution.msg.innerHTML = <span class="chat-user" style="${isCustom ? 'color:#ffb703;' : ''}">${user}:</span>${text};chatBox.appendChild(msg);chatBox.scrollTop = chatBox.scrollHeight;}sendBtn.onclick = () => {if(inputField.value.trim() !== "") {appendMessage("You", inputField.value, true);inputField.value = "";}};inputField.onkeypress = (e) => { if(e.key === 'Enter') sendBtn.click(); };// Simulate crowd chatting continuouslysetInterval(() => {const randomUser = botNames[Math.floor(Math.random() * botNames.length)];const randomText = botMessages[Math.floor(Math.random() * botMessages.length)];appendMessage(randomUser, randomText);}, 3500);}/* Real Football Live Timetable Schedule Feature via Open API */function fetchLiveFootballSchedule() {const container = document.getElementById('scores-container');// Using a highly available, unauthenticated football metrics dataset structurefetch('openligadb.de').then(response => response.json()).then(data => {container.innerHTML = "";if(!data || data.length === 0) {container.innerHTML = <div style="color:var(--text-muted);font-size:13px;text-align:center;">No match cycles active today.</div>;return;}// Show up to 8 real upcoming/live fixtures from the database layerdata.slice(0, 8).forEach(match => {const item = document.createElement('div');item.className = "score-item";const homePoints = match.matchResults && match.matchResults[0] ? match.matchResults[0].pointsTeam1 : 0;const awayPoints = match.matchResults && match.matchResults[0] ? match.matchResults[0].pointsTeam2 : 0;const statusText = match.matchIsFinished ? "FT" : (match.isLive ? "LIVE" : "UPCOMING");item.innerHTML = <div class="team-row"> <span>⚽ ${match.team1.teamName}</span> <span>⚽ ${match.team2.teamName}</span> </div> <div style="display:flex; gap:12px; align-items:center;"> <div class="score-row"> <span>${homePoints}</span> <span>${awayPoints}</span> </div> <div class="match-time" style="${statusText === 'LIVE' ? 'color:#000; background:var(--accent); font-weight:bold;' : ''}"> ${statusText} </div> </div>;container.appendChild(item);});}).catch(err => {console.error("Schedule loading failed", err);container.innerHTML = <div style="color:#ef4444;font-size:12px;text-align:center;">Failed to sync live football fixtures. Check network.</div>;});}
+    <script src="script.js"></script>
+</body>
+</html>
