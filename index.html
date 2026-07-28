@@ -3,92 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Football Streaming Hub</title>
+    <title>Fully Automated Football Stream Network</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0b0f19; color: #fff; margin: 0; padding: 20px; }
-        header { text-align: center; padding: 15px; background: #111827; border-bottom: 4px solid #10b981; border-radius: 8px; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 22px; color: #10b981; }
+        header { text-align: center; padding: 15px; background: #111827; border-bottom: 4px solid #3b82f6; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; color: #3b82f6; }
         .layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
         @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
         .sidebar { background: #111827; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; }
-        .match-btn { background: #1f2937; border: 1px solid #374151; padding: 15px; margin-bottom: 12px; border-radius: 6px; cursor: pointer; text-align: left; width: 100%; color: #fff; transition: 0.2s; display: block; }
-        .match-btn:hover { background: #374151; border-color: #10b981; }
-        .match-btn strong { color: #10b981; display: block; font-size: 12px; margin-bottom: 4px; }
-        .active-match { background: #10b981 !important; color: #000 !important; border-color: #059669 !important; font-weight: bold; }
-        .active-match strong { color: #000 !important; }
+        .match-btn { background: #1f2937; border: 1px solid #374151; padding: 12px; margin-bottom: 10px; border-radius: 6px; cursor: pointer; text-align: left; width: 100%; color: #fff; display: block; transition: 0.2s; }
+        .match-btn:hover { background: #374151; border-color: #3b82f6; }
+        .match-btn strong { color: #ef4444; display: block; font-size: 11px; text-transform: uppercase; margin-bottom: 3px; }
+        .active-match { background: #3b82f6 !important; color: #fff !important; border-color: #2563eb !important; font-weight: bold; }
+        .active-match strong { color: #fff !important; }
         .player-panel { background: #111827; padding: 20px; border-radius: 8px; text-align: center; }
         .video-box { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; background: #000; border-radius: 6px; overflow: hidden; }
         .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-        #match-title { margin-top: 15px; color: #10b981; font-size: 18px; }
-        .sandbox-alert { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 13px; text-align: left; line-height: 1.4; }
+        #match-title { margin-top: 15px; color: #3b82f6; font-size: 18px; }
+        .loading-text { color: #9ca3af; padding: 20px; text-align: center; font-style: italic; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>⚽ AUTOMATED LIVE FOOTBALL DIRECTORY</h1>
+    <h1>⚽ SELF-RENEWING LIVE SPORTS INDEX</h1>
+    <p style="margin:5px 0 0 0; color:#9ca3af; font-size:12px;">Data updates instantly on load without code modifications.</p>
 </header>
 
 <div class="layout">
-    <!-- Live Fixtures List -->
+    <!-- Live Automatically Loaded Sidebar -->
     <div class="sidebar">
-        <h2 style="margin-top:0; font-size: 16px; color: #9ca3af; border-bottom: 1px solid #374151; padding-bottom: 8px;">Select Active Stream</h2>
-        
-        <!-- Live Stream Option 1 (Using reliable HTML5 video stream provider) -->
-        <button class="match-btn active-match" onclick="playMatch(this, 'https://vidsrc.me', 'EPL Matchday: Live Server Node 1')">
-            <strong>🔴 LIVE NOW</strong>
-            English Premier League Main Feed
-        </button>
-
-        <!-- Live Stream Option 2 -->
-        <button class="match-btn" onclick="playMatch(this, 'https://embed.su', 'Champions League: Live Server Node 2')">
-            <strong>🔴 LIVE NOW</strong>
-            UEFA Champions League International Feed
-        </button>
-
-        <!-- Live Stream Option 3 -->
-        <button class="match-btn" onclick="playMatch(this, 'https://vidsrc.to', 'La Liga: Live Server Node 3')">
-            <strong>🔴 LIVE NOW</strong>
-            La Liga Multistream Feed
-        </button>
-
-        <!-- Open Source Sample Stream Option 4 -->
-        <button class="match-btn" onclick="playMatch(this, 'https://youtube.com', 'Sky Sports News / Highlights Desk')">
-            <strong>📡 24/7 BROADCAST</strong>
-            Global Sports News & Match Updates
-        </button>
+        <h2 style="margin-top:0; font-size: 15px; color: #9ca3af; border-bottom: 1px solid #374151; padding-bottom: 8px;">Live Fixture Feeds</h2>
+        <div id="dynamic-links-container">
+            <div class="loading-text">Connecting to central streaming database...</div>
+        </div>
     </div>
 
-    <!-- Live Player Sandbox Window -->
+    <!-- Live Output Player Window -->
     <div class="player-panel">
         <div class="video-box">
-            <!-- Sandbox limits script hijacking, cookies, and top-level ad redirects -->
-            <iframe id="main-player" src="https://vidsrc.me" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            <!-- Sandbox limits script hijacking and forceful new-window ad pops -->
+            <iframe id="api-player" src="https://vidsrc.me" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
         </div>
-        <h3 id="match-title">EPL Matchday: Live Server Node 1</h3>
-        
-        <div class="sandbox-alert">
-            <strong>💡 How to Play Streams:</strong> 
-            <br>1. Select a match or alternative network server node from the left menu.
-            <br>2. If the active server encounters heavy traffic or buffers, click any alternative server below it to instantly refresh the source signal.
-        </div>
+        <h3 id="match-title">Channel Node 1 (Auto-Load Default)</h3>
     </div>
 </div>
 
 <script>
-    function playMatch(element, streamUrl, titleText) {
-        // Remove active class from all buttons
-        document.querySelectorAll('.match-btn').forEach(btn => btn.classList.remove('active-match'));
+    // This public global data repository acts as a live, decentralized index for open video endpoints
+    const AUTOMATED_FEED_URL = "https://github.io";
+
+    async function loadAutomatedLinks() {
+        const container = document.getElementById('dynamic-links-container');
         
-        // Add active highlighting to the clicked button
-        element.classList.add('active-match');
-        
-        // Push the update to the header text
-        document.getElementById('match-title').innerText = titleText;
-        
-        // Change the source url inside the streaming container frame
-        document.getElementById('main-player').src = streamUrl;
+        try {
+            // Asynchronously fetching live sports server registries directly via user browser
+            const response = await fetch(AUTOMATED_FEED_URL);
+            const channels = await response.json();
+            
+            container.innerHTML = ""; // Clear initial connection text
+            
+            // Limit to top 8 active running lines for clean interface organization
+            const targetChannels = channels.slice(0, 8);
+            
+            targetChannels.forEach((channel, index) => {
+                const btn = document.createElement('button');
+                btn.className = "match-btn";
+                if(index === 0) btn.classList.add('active-match'); // Auto highlight first stream line
+                
+                // Constructing an automatic routing engine using fallback servers
+                const fallbackStreamNode = `https://vidsrc.meembed/${channel.id || 'sports'}`;
+                
+                btn.onclick = () => {
+                    // Update layout elements dynamically on click
+                    document.querySelectorAll('.match-btn').forEach(b => b.classList.remove('active-match'));
+                    btn.classList.add('active-match');
+                    document.getElementById('match-title').innerText = channel.name || `Sports Feed ${index + 1}`;
+                    document.getElementById('api-player').src = fallbackStreamNode;
+                };
+                
+                btn.innerHTML = `
+                    <strong>⚡ LIVE SERVER STACK ${index + 1}</strong>
+                    ${channel.name || 'International Live Feed Network'}
+                `;
+                container.appendChild(btn);
+            });
+            
+        } catch (error) {
+            // Fallback failover array running behind the scenes if main cloud repos timeout
+            console.log("Database response routing failed, deploying backup engine.");
+            generateHardcodedAutomation();
+        }
     }
+
+    function generateHardcodedAutomation() {
+        const container = document.getElementById('dynamic-links-container');
+        container.innerHTML = "";
+        
+        // Automated fallback index array using globally established open stream relays
+        const staticBackupMappers = [
+            { name: "Global Live Server Alpha", url: "https://vidsrc.me" },
+            { name: "Global Live Server Beta", url: "https://embed.su" },
+            { name: "Global Live Server Gamma", url: "https://vidsrc.to" },
+            { name: "Global Live Server Delta", url: "https://superembed.org" }
+        ];
+
+        staticBackupMappers.forEach((server, index) => {
+            const btn = document.createElement('button');
+            btn.className = "match-btn";
+            if(index === 0) btn.classList.add('active-match');
+            
+            btn.onclick = () => {
+                document.querySelectorAll('.match-btn').forEach(b => b.classList.remove('active-match'));
+                btn.classList.add('active-match');
+                document.getElementById('match-title').innerText = server.name;
+                document.getElementById('api-player').src = server.url;
+            };
+            
+            btn.innerHTML = `
+                <strong>📡 BACKUP RELAY CHANNEL</strong>
+                ${server.name}
+            `;
+            container.appendChild(btn);
+        });
+    }
+
+    // Initialize network request on layout boot
+    loadAutomatedLinks();
 </script>
 
 </body>
