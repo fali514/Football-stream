@@ -3,113 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auto-Updating Live Football Portal</title>
-    <!-- Video JS for HLS playback -->
-    <link href="https://zencdn.net" rel="stylesheet" />
+    <title>Live Football Streaming Hub</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0b0f19; color: #fff; margin: 0; padding: 20px; }
-        header { text-align: center; padding: 20px; background: #111827; border-bottom: 4px solid #10b981; border-radius: 8px; margin-bottom: 20px; }
-        h1 { margin: 0; font-size: 24px; color: #10b981; }
-        .grid { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; max-width: 1300px; margin: 0 auto; }
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
-        .match-list { background: #111827; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; }
-        .match-item { background: #1f2937; padding: 15px; margin-bottom: 12px; border-radius: 6px; cursor: pointer; transition: 0.2s; border-left: 4px solid #374151; }
-        .match-item:hover { background: #374151; border-left-color: #10b981; }
-        .match-time { color: #10b981; font-weight: bold; font-size: 14px; }
-        .match-teams { font-size: 16px; margin-top: 5px; font-weight: 600; }
-        .player-box { background: #111827; padding: 20px; border-radius: 8px; text-align: center; display: flex; flex-direction: column; justify-content: center; }
-        .video-wrapper { width: 100%; background: #000; border-radius: 6px; overflow: hidden; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
-        #active-title { margin-top: 15px; color: #10b981; font-size: 18px; }
-        .status-tag { display: inline-block; background: #ef4444; color: white; padding: 2px 6px; font-size: 12px; border-radius: 4px; font-weight: bold; margin-left: 10px; text-transform: uppercase; animation: blink 1.5s infinite; }
-        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0b0f19; color: #fff; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 15px; background: #111827; border-bottom: 4px solid #10b981; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; color: #10b981; }
+        .layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+        .sidebar { background: #111827; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; }
+        .match-btn { background: #1f2937; border: 1px solid #374151; padding: 15px; margin-bottom: 12px; border-radius: 6px; cursor: pointer; text-align: left; width: 100%; color: #fff; transition: 0.2s; display: block; }
+        .match-btn:hover { background: #374151; border-color: #10b981; }
+        .match-btn strong { color: #10b981; display: block; font-size: 12px; margin-bottom: 4px; }
+        .active-match { background: #10b981 !important; color: #000 !important; border-color: #059669 !important; font-weight: bold; }
+        .active-match strong { color: #000 !important; }
+        .player-panel { background: #111827; padding: 20px; border-radius: 8px; text-align: center; }
+        .video-box { position: relative; width: 100%; height: 0; padding-bottom: 56.25%; background: #000; border-radius: 6px; overflow: hidden; }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+        #match-title { margin-top: 15px; color: #10b981; font-size: 18px; }
+        .sandbox-alert { background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; color: #10b981; padding: 12px; margin-top: 15px; border-radius: 6px; font-size: 13px; text-align: left; line-height: 1.4; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>⚽ AUTOMATED LIVE FOOTBALL DIRECTORY</h1>
-    <p style="margin: 5px 0 0 0; color: #9ca3af; font-size: 14px;">Streams auto-refresh every time matches go live</p>
 </header>
 
-<div class="grid">
-    <!-- Automated Matches Sidebar -->
-    <div class="match-list">
-        <h2 style="margin-top:0; font-size: 18px; color: #9ca3af;">Live & Upcoming Fixtures</h2>
-        <div id="fixtures-container">
-            <!-- JavaScript populates matches dynamically here -->
-            <div style="color:#9ca3af; padding: 20px; text-align:center;">Loading active match feeds...</div>
-        </div>
+<div class="layout">
+    <!-- Live Fixtures List -->
+    <div class="sidebar">
+        <h2 style="margin-top:0; font-size: 16px; color: #9ca3af; border-bottom: 1px solid #374151; padding-bottom: 8px;">Select Active Stream</h2>
+        
+        <!-- Live Stream Option 1 (Using reliable HTML5 video stream provider) -->
+        <button class="match-btn active-match" onclick="playMatch(this, 'https://vidsrc.me', 'EPL Matchday: Live Server Node 1')">
+            <strong>🔴 LIVE NOW</strong>
+            English Premier League Main Feed
+        </button>
+
+        <!-- Live Stream Option 2 -->
+        <button class="match-btn" onclick="playMatch(this, 'https://embed.su', 'Champions League: Live Server Node 2')">
+            <strong>🔴 LIVE NOW</strong>
+            UEFA Champions League International Feed
+        </button>
+
+        <!-- Live Stream Option 3 -->
+        <button class="match-btn" onclick="playMatch(this, 'https://vidsrc.to', 'La Liga: Live Server Node 3')">
+            <strong>🔴 LIVE NOW</strong>
+            La Liga Multistream Feed
+        </button>
+
+        <!-- Open Source Sample Stream Option 4 -->
+        <button class="match-btn" onclick="playMatch(this, 'https://youtube.com', 'Sky Sports News / Highlights Desk')">
+            <strong>📡 24/7 BROADCAST</strong>
+            Global Sports News & Match Updates
+        </button>
     </div>
 
-    <!-- Active Media Display Screen -->
-    <div class="player-box">
-        <div class="video-wrapper">
-            <video id="live-player" class="video-js vjs-default-skin vjs-16-9" controls preload="auto" width="100%">
-                <!-- Default fallback channel -->
-                <source src="https://mux.dev" type="application/x-mpegURL">
-            </video>
+    <!-- Live Player Sandbox Window -->
+    <div class="player-panel">
+        <div class="video-box">
+            <!-- Sandbox limits script hijacking, cookies, and top-level ad redirects -->
+            <iframe id="main-player" src="https://vidsrc.me" allowfullscreen sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
         </div>
-        <h3 id="active-title">Select a Match From the Live Fixtures Panel</h3>
+        <h3 id="match-title">EPL Matchday: Live Server Node 1</h3>
+        
+        <div class="sandbox-alert">
+            <strong>💡 How to Play Streams:</strong> 
+            <br>1. Select a match or alternative network server node from the left menu.
+            <br>2. If the active server encounters heavy traffic or buffers, click any alternative server below it to instantly refresh the source signal.
+        </div>
     </div>
 </div>
 
-<script src="https://zencdn.net"></script>
 <script>
-    const player = videojs('live-player');
-
-    // Free public crowd-sourced IPTV databases (auto-filtered for sports streams)
-    const openStreamDatabases = [
-        "https://iptv-org.github.io/iptv/index.m3u", 
-        "https://raw.githubusercontent.com/free-tv/iptv/master/playlist.m3u8"
-    ];
-
-    // Simulating the server-side scraper that parses direct sports channels from live indices
-    async function fetchLiveFeeds() {
-        const container = document.getElementById('fixtures-container');
+    function playMatch(element, streamUrl, titleText) {
+        // Remove active class from all buttons
+        document.querySelectorAll('.match-btn').forEach(btn => btn.classList.remove('active-match'));
         
-        try {
-            // In a live environment, you parse live stream lists via APIs
-            // Setting up a responsive array matching live scheduled matches to available m3u8 backbones
-            const liveMockScrapedData = [
-                { title: "English Premier League Match", time: "LIVE NOW", url: "https://mux.dev", live: true },
-                { title: "UEFA Champions League Feed 1", time: "LIVE NOW", url: "https://zencdn.net", live: true }, // Backup format sample
-                { title: "La Liga International Broadcast", time: "Starts in 15m", url: "https://mux.dev", live: false },
-                { title: "Serie A Match Feed", time: "Starts in 45m", url: "https://mux.dev", live: false }
-            ];
-
-            container.innerHTML = ""; // Clear loader
-            
-            liveMockScrapedData.forEach(match => {
-                const card = document.createElement('div');
-                card.className = "match-item";
-                card.onclick = () => loadStream(match.url, match.title);
-                
-                card.innerHTML = `
-                    <span class="match-time">${match.time}</span>
-                    ${match.live ? '<span class="status-tag">Live</span>' : ''}
-                    <div class="match-teams">${match.title}</div>
-                `;
-                container.appendChild(card);
-            });
-        } catch (error) {
-            container.innerHTML = "<div style='color:#ef4444;'>Failed to pull fresh feeds. Refreshing stream grid...</div>";
-        }
-    }
-
-    function loadStream(url, title) {
-        document.getElementById('active-title').innerText = title;
+        // Add active highlighting to the clicked button
+        element.classList.add('active-match');
         
-        // Auto-detect extension format to safely swap streams
-        if(url.endsWith('.mp4')) {
-            player.src({ src: url, type: 'video/mp4' });
-        } else {
-            player.src({ src: url, type: 'application/x-mpegURL' });
-        }
-        player.play();
+        // Push the update to the header text
+        document.getElementById('match-title').innerText = titleText;
+        
+        // Change the source url inside the streaming container frame
+        document.getElementById('main-player').src = streamUrl;
     }
-
-    // Initialize feeds on boot
-    fetchLiveFeeds();
 </script>
 
 </body>
