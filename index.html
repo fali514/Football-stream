@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fully Automated Football Stream Network</title>
+    <!-- Video.js Default Engine CSS Stylesheet -->
+    <link href="https://zencdn.net" rel="stylesheet" />
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background-color: #0b0f19; color: #fff; margin: 0; padding: 20px; }
+        header { text-align: center; padding: 15px; background: #111827; border-bottom: 4px solid #3b82f6; border-radius: 8px; margin-bottom: 20px; }
+        h1 { margin: 0; font-size: 22px; color: #3b82f6; }
+        .layout { display: grid; grid-template-columns: 1fr 2.5fr; gap: 20px; max-width: 1400px; margin: 0 auto; }
+        @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+        .sidebar { background: #111827; padding: 15px; border-radius: 8px; max-height: 600px; overflow-y: auto; }
+        .match-btn { background: #1f2937; border: 1px solid #374151; padding: 12px; margin-bottom: 10px; border-radius: 6px; cursor: pointer; text-align: left; width: 100%; color: #fff; display: block; transition: 0.2s; }
+        .match-btn:hover { background: #374151; border-color: #3b82f6; }
+        .match-btn strong { color: #ef4444; display: block; font-size: 11px; text-transform: uppercase; margin-bottom: 3px; }
+        .active-match { background: #3b82f6 !important; color: #fff !important; border-color: #2563eb !important; font-weight: bold; }
+        .active-match strong { color: #fff !important; }
+        .player-panel { background: #111827; padding: 20px; border-radius: 8px; text-align: center; }
+        .video-box { position: relative; width: 100%; background: #000; border-radius: 6px; overflow: hidden; margin: 0 auto; }
+        /* Style adjustments for the native player element */
+        .video-js { width: 100% !important; height: auto !important; aspect-ratio: 16/9; }
+        #match-title { margin-top: 15px; color: #3b82f6; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>⚽ LIVE SPORTS STREAM NETWORK</h1>
+    <p style="margin:5px 0 0 0; color:#9ca3af; font-size:12px;">Active legal networks broadcasting sports events.</p>
+</header>
+
+<div class="layout">
+    <!-- Active Channels Sidebar -->
+    <div class="sidebar">
+        <h2 style="margin-top:0; font-size: 15px; color: #9ca3af; border-bottom: 1px solid #374151; padding-bottom: 8px;">Available Feeds</h2>
+        <div id="dynamic-links-container"></div>
+    </div>
+
+    <!-- Active Stream Viewscreen -->
+    <div class="player-panel">
+        <div class="video-box">
+            <!-- HTML5 Video Component -->
+            <video id="api-player" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto">
+                <source src="https://m3u8.dev" type="application/x-mpegURL">
+            </video>
+        </div>
+        <h3 id="match-title">Nova Sport 1 (Live Football & Cup Games)</h3>
+    </div>
+</div>
+
+<!-- Video.js Framework Script -->
+<script src="https://zencdn.net"></script>
+
+<script>
+    let player;
+
+    // Active streams wrapped inside a free proxy link to prevent CORS browser blocking
+    const activeFeeds = [
+        { 
+            name: "Nova Sport 1 (Live European Matches)", 
+            url: "https://m3u8.dev" 
+        },
+        { 
+            name: "Nova Sport 2 (Live Sports Hub)", 
+            url: "https://m3u8.dev" 
+        },
+        { 
+            name: "Red Bull TV Live Sports", 
+            url: "https://m3u8.dev" 
+        },
+        { 
+            name: "Unbeaten Sports Network", 
+            url: "https://m3u8.dev" 
+        }
+    ];
+
+    document.addEventListener("DOMContentLoaded", () => {
+        // Init Video.js Engine fluid scale
+        player = videojs('api-player', {
+            fluid: true
+        });
+
+        renderChannelSidebar();
+    });
+
+    function renderChannelSidebar() {
+        const container = document.getElementById('dynamic-links-container');
+        container.innerHTML = ""; 
+
+        activeFeeds.forEach((server, index) => {
+            const btn = document.createElement('button');
+            btn.className = "match-btn";
+            if(index === 0) btn.classList.add('active-match');
+
+            btn.onclick = () => {
+                document.querySelectorAll('.match-btn').forEach(b => b.classList.remove('active-match'));
+                btn.classList.add('active-match');
+                switchLiveStream(server.url, server.name);
+            };
+
+            btn.innerHTML = `
+                <strong>📡 MATCH FEED LAYER 0${index + 1}</strong>
+                ${server.name}
+            `;
+            container.appendChild(btn);
+        });
+    }
+
+    function switchLiveStream(url, name) {
+        document.getElementById('match-title').innerText = name;
+        if (player) {
+            player.src({ src: url, type: 'application/x-mpegURL' });
+            player.load();
+            
+            // Play stream. If blocked by browser layout, wait for user input click.
+            player.play().catch(err => {
+                console.log("Browser policy blocked play. Tap the screen center button to play.");
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
