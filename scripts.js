@@ -22,7 +22,7 @@ const channels = [
     id: 4,
     title: "Tears of Steel (4K)",
     category: "Movies - Public",
-    url: "https://demo.unified-streaming.com/k8s/features/static/hls/live/la.m3u8"
+    url: "https://youtu.be/iD_MyDbP_ZE?si=Le3Sh3wiEPWyUkz3"
   }
 ];
 
